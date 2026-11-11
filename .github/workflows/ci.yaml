@@ -1,0 +1,65 @@
+name: build
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+env:
+  VERSION_MAJOR: 0
+  VERSION_MINOR: 1
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: install
+        run: npm ci
+
+      - name: generate version
+        id: version
+        shell: bash
+        run: |
+          # Chrome extension version is 3-part: MAJOR.MINOR.BUILD (for example 0.1.42).
+          # The build number is the monotonically increasing workflow run number.
+          BUILD_NUMBER=${{ github.run_number }}
+          PACKAGE_VERSION="${{ env.VERSION_MAJOR }}.${{ env.VERSION_MINOR }}.${BUILD_NUMBER}"
+          echo "version=${PACKAGE_VERSION}" >> "$GITHUB_OUTPUT"
+          echo "Generated version: ${PACKAGE_VERSION}"
+          node -e "const fs=require('fs'); const p='manifest.json'; const m=JSON.parse(fs.readFileSync(p,'utf8')); m.version=process.argv[1]; fs.writeFileSync(p, JSON.stringify(m,null,2)+'\n');" "$PACKAGE_VERSION"
+
+      - name: build
+        run: npm run build
+
+      - name: package
+        run: |
+          NAME="msrc-researcher-portal-extension-v${{ steps.version.outputs.version }}.zip"
+          (cd dist && zip -r "../${NAME}" .)
+          echo "asset=${NAME}" >> "$GITHUB_OUTPUT"
+        id: package
+
+      - name: create release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        continue-on-error: true
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          name: msrc-ext v${{ steps.version.outputs.version }}
+          generate_release_notes: true
+          draft: false
+          prerelease: false
+          files: ${{ steps.package.outputs.asset }}

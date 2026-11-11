@@ -1,0 +1,34 @@
+{
+  "manifest_version": 3,
+  "name": "MSRC Researcher Portal Extension",
+  "version": "0.1.0",
+  "description": "Extension for the MSRC Researcher Portal.",
+  "minimum_chrome_version": "111",
+  "action": {
+    "default_title": "Double-click to open the portal"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://msrc.microsoft.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_start",
+      "all_frames": false
+    },
+    {
+      "matches": ["https://msrc.microsoft.com/*"],
+      "js": ["proxy.js"],
+      "run_at": "document_start",
+      "world": "MAIN",
+      "all_frames": false
+    }
+  ],
+  "permissions": ["storage", "alarms", "declarativeNetRequest"],
+  "host_permissions": [
+    "https://msrc.microsoft.com/*",
+    "https://api.msrc.microsoft.com/*",
+    "https://msrcweb.b2clogin.com/*"
+  ]
+}

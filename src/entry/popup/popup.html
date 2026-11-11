@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<style>
+  body { font: 13px/1.45 system-ui, sans-serif; width: 340px; margin: 0; padding: 10px; }
+  h1 { font-size: 14px; margin: 0 0 6px; }
+  .meta { color: #605e5c; margin-bottom: 8px; }
+  ul { list-style: none; margin: 0; padding: 0; max-height: 380px; overflow-y: auto; }
+  li { padding: 6px 4px; border-bottom: 1px solid #edebe9; }
+  li a { color: #0067b8; text-decoration: none; font-weight: 600; }
+  .title { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .sub { color: #605e5c; font-size: 12px; }
+  .err { color: #a4262c; }
+  button { margin-top: 8px; padding: 4px 12px; border: 1px solid #8a8886; border-radius: 4px; background: #fff; cursor: pointer; }
+</style>
+</head>
+<body>
+<h1>MSRC Researcher Portal Extension</h1>
+<div class="meta" id="meta">Loading…</div>
+<ul id="list"></ul>
+<button id="open">Open portal</button>
+<button id="refresh">Refresh</button>
+<script src="popup.js"></script>
+</body>
+</html>

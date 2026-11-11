@@ -1,0 +1,22 @@
+{
+  "name": "msrc-researcher-portal-extension",
+  "version": "0.1.0",
+  "description": "Extension for the MSRC Researcher Portal.",
+  "scripts": {
+    "build": "webpack --env mode=production --config webpack.config.js --progress"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tinysec/msrc-ext.git"
+  },
+  "private": true,
+  "devDependencies": {
+    "@types/chrome": "^0.0.280",
+    "@types/webpack": "^5.28.5",
+    "ts-loader": "^9.5.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "webpack": "^5.99.8",
+    "webpack-cli": "^6.0.1"
+  }
+}
